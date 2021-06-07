@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace my_books_api.Data.Models
 {
@@ -14,5 +16,10 @@ namespace my_books_api.Data.Models
         public string Author { get; set; }
         public string CoverUrl { get; set; }
         public DateTime DateAdded { get; set; }
+
+        // Navigation Properties
+        public int PublisherId { get; set; }
+        public Publisher Publisher { get; set; }
+        public ICollection<BookAuthor> BookAuthors { get; set; }
     }
 }

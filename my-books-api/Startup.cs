@@ -29,11 +29,11 @@ namespace my_books_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configure Services
-            services.AddScoped<BooksService>();
-
             // Configure DbContext with SQL
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Configure Services
+            services.AddTransient<BooksService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
