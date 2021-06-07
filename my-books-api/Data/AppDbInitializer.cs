@@ -23,7 +23,6 @@ namespace my_books_api.Data
                         DateRead = DateTime.Now.AddDays(-10),
                         Rate = 4,
                         Genre = "Biography",
-                        Author = "First Author",
                         CoverUrl = "https://....",
                         DateAdded = DateTime.Now
                     },
@@ -35,7 +34,6 @@ namespace my_books_api.Data
                         DateRead = DateTime.Now.AddDays(-10),
                         Rate = 4,
                         Genre = "Biography",
-                        Author = "Second Author",
                         CoverUrl = "https://....",
                         DateAdded = DateTime.Now
                     });

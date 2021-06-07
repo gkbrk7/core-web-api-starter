@@ -15,10 +15,10 @@ namespace my_books_api.Controllers
             _booksService = booksService;
         }
 
-        [HttpPost("add-book")]
+        [HttpPost("add-book-with-authors")]
         public async Task<IActionResult> AddBook([FromBody] BookVM book)
         {
-            await _booksService.AddBookAsync(book);
+            await _booksService.AddBookWithAuthorsAsync(book);
             return Ok();
         }
 

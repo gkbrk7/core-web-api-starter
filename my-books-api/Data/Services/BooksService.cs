@@ -16,7 +16,7 @@ namespace my_books_api.Data.Services
             _context = context;
         }
 
-        public async Task AddBookAsync(BookVM book)
+        public async Task AddBookWithAuthorsAsync(BookVM book)
         {
             var _book = new Book
             {
@@ -27,12 +27,23 @@ namespace my_books_api.Data.Services
                 Rate = book.Rate,
                 Genre = book.Genre,
                 CoverUrl = book.CoverUrl,
-                Author = book.Author,
-                DateAdded = DateTime.Now
+                DateAdded = DateTime.Now,
+                PublisherId = book.PublisherId
             };
 
             await _context.Books.AddAsync(_book);
             await _context.SaveChangesAsync();
+
+            foreach (var id in book.AuthorIds)
+            {
+                var _book_author = new BookAuthor
+                {
+                    BookId = _book.Id,
+                    AuthorId = id
+                };
+                await _context.BookAuthors.AddAsync(_book_author);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync() => await _context.Books.ToListAsync();
@@ -43,7 +54,6 @@ namespace my_books_api.Data.Services
             var _book = await _context.Books.FirstOrDefaultAsync(x => x.Id == bookId);
             if (book != null)
             {
-                _book.Author = book.Author;
                 _book.CoverUrl = book.CoverUrl;
                 _book.DateAdded = DateTime.Now;
                 _book.DateRead = book.IsRead ? book.DateRead.Value : null;
