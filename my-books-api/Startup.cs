@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using my_books_api.Data;
+using my_books_api.Data.Services;
 
 namespace my_books_api
 {
@@ -28,7 +29,12 @@ namespace my_books_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configure Services
+            services.AddScoped<BooksService>();
+
+            // Configure DbContext with SQL
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -56,6 +62,8 @@ namespace my_books_api
             {
                 endpoints.MapControllers();
             });
+
+            //AppDbInitializer.Seed(app); // Db Initialization
         }
     }
 }
