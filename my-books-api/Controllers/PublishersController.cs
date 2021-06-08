@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using my_books_api.ActionResults;
+using my_books_api.Data.Models;
 using my_books_api.Data.Services;
 using my_books_api.Data.ViewModels;
 using System.Threading.Tasks;
@@ -22,29 +24,98 @@ namespace my_books_api.Controllers
             return Ok();
         }
 
-        [HttpGet("get-all-publishers")]
-        public async Task<IActionResult> GetAllPublishers()
+        [HttpGet("get-publisher-books-with-authors/{id}")]
+        public IActionResult GetPublisherData(int id)
         {
-            return Ok(null);
+            return Ok(_publishersService.GetPublisherData(id));
         }
 
-        // [HttpGet("get-book-by-id/{id}")]
-        // public async Task<IActionResult> GetAuthorById(int id)
+        [HttpDelete("delete-publisher-by-id")]
+        public async Task<IActionResult> DeletePublisherById(int id)
+        {
+            await _publishersService.DeletePublisherById(id);
+            return Ok();
+        }
+
+        // [HttpGet("get-publisher-by-id/{id}")]
+        // // Specific Return Type : It does not give status code 
+        // public PublisherVM GetPublisherById(int id)
         // {
-        //     return Ok(await _booksService.GetAuthorByIdAsync(id));
+        //     var response = _publishersService.GetPublisherById(id);
+        //     if (response != null)
+        //     {
+        //         return response;
+        //     }
+        //     else
+        //     {
+        //         return null;
+        //     }
         // }
 
-        // [HttpPut("update-book-by-id/{id}")]
-        // public async Task<IActionResult> UpdateAuthorById(int id, [FromBody] AuthorVM book)
+        // [HttpGet("get-publisher-by-id/{id}")]
+        // // ActionResult<T> return type
+        // public ActionResult<PublisherVM> GetPublisherById(int id)
         // {
-        //     return Ok(await _booksService.UpdateAuthorById(id, book));
+        //     var response = _publishersService.GetPublisherById(id);
+        //     if (response != null)
+        //     {
+        //         return response;
+        //     }
+        //     else
+        //     {
+        //         return NotFound();
+        //     }
         // }
 
-        // [HttpDelete("delete-book-by-id/{id}")]
-        // public async Task<IActionResult> DeleteAuthorById(int id)
+        // [HttpGet("get-publisher-by-id/{id}")]
+        // // Custom Action Result
+        // public CustomActionResult<PublisherVM> GetPublisherById(int id)
         // {
-        //     await _booksService.DeleteAuthorById(id);
-        //     return Ok();
+        //     var response = _publishersService.GetPublisherById(id);
+        //     if (response != null)
+        //     {
+        //         var responseObj = new CustomActionResultVM<PublisherVM>
+        //         {
+        //             Data = response
+        //         };
+        //         return new CustomActionResult<PublisherVM>(responseObj);
+        //     }
+        //     else
+        //     {
+        //         var responseObj = new CustomActionResultVM<PublisherVM>
+        //         {
+        //             Exception = new System.Exception("This is coming from publishers controller")
+        //         };
+        //         return new CustomActionResult<PublisherVM>(responseObj);
+        //     }
         // }
+
+        [HttpGet("get-publisher-by-id/{id}")]
+        public IActionResult GetPublisherById(int id)
+        {
+            var response = _publishersService.GetPublisherById(id);
+            if (response != null)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("get-all-publishers")]
+        public IActionResult GetAllPublishers(string sortBy, string searchString, int pageNumber)
+        {
+            try
+            {
+                var result = _publishersService.GetAllPublishers(sortBy, searchString, pageNumber);
+                return Ok(result);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("Sorry, we could not load the publishers");
+            }
+        }
     }
 }

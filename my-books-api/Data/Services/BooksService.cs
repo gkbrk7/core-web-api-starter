@@ -48,7 +48,22 @@ namespace my_books_api.Data.Services
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync() => await _context.Books.ToListAsync();
 
-        public async Task<Book> GetBookByIdAsync(int bookId) => await _context.Books.FirstOrDefaultAsync(x => x.Id == bookId);
+        public async Task<BookWithAuthorsVM> GetBookByIdAsync(int bookId)
+        {
+            var _booksWithAuthors = await _context.Books.Where(x => x.Id == bookId).Select(book => new BookWithAuthorsVM
+            {
+                Title = book.Title,
+                Description = book.Description,
+                IsRead = book.IsRead,
+                DateRead = book.IsRead ? book.DateRead.Value : null,
+                Rate = book.IsRead ? book.Rate.Value : null,
+                Genre = book.Genre,
+                CoverUrl = book.CoverUrl,
+                PublisherName = book.Publisher.Name,
+                AuthorNames = book.BookAuthors.Select(x => x.Author.FullName).ToList()
+            }).FirstOrDefaultAsync();
+            return _booksWithAuthors;
+        }
         public async Task<Book> UpdateBookById(int bookId, BookVM book)
         {
             var _book = await _context.Books.FirstOrDefaultAsync(x => x.Id == bookId);

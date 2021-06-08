@@ -22,6 +22,13 @@ namespace my_books_api.Controllers
             return Ok();
         }
 
+        [HttpGet("get-author-with-books-by-id/{id}")]
+        public IActionResult GetAuthorWithBooks(int id)
+        {
+            var response = _authorsService.GetAuthorWithBooksVM(id);
+            return Ok(response);
+        }
+
         // [HttpGet("get-all-books")]
         // public async Task<IActionResult> GetAllAuthors()
         // {
