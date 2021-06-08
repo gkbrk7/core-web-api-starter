@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using my_books_api.Data;
 using my_books_api.Data.Services;
+using my_books_api.Exceptions;
 
 namespace my_books_api
 {
@@ -37,6 +38,7 @@ namespace my_books_api
             services.AddScoped<BooksService>();
             services.AddScoped<AuthorsService>();
             services.AddScoped<PublishersService>();
+            services.AddScoped<LogsService>();
 
             services.AddControllers();
             services.AddApiVersioning(config =>
@@ -55,7 +57,7 @@ namespace my_books_api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -69,6 +71,9 @@ namespace my_books_api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Exception Handling
+            app.ConfigureBuildInExceptionHandler(loggerFactory);
 
             app.UseEndpoints(endpoints =>
             {
