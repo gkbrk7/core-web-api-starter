@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,15 @@ namespace my_books_api
             services.AddScoped<PublishersService>();
 
             services.AddControllers();
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+
+                // config.ApiVersionReader = new HeaderApiVersionReader("custom-version-header"); // header based api versioning
+                // config.ApiVersionReader = new MediaTypeApiVersionReader(); // content/media type api versioning, to use add Content-Type text/plain;v=2.0 to header and send request
+            }); // Microsoft.AspNetCore.Mvc.Versioning package and create folders in Controller directory
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "my_books_api", Version = "v1" });
