@@ -35,10 +35,10 @@ namespace my_books_api
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Configure Services
-            services.AddScoped<BooksService>();
-            services.AddScoped<AuthorsService>();
-            services.AddScoped<PublishersService>();
-            services.AddScoped<LogsService>();
+            services.AddTransient<BooksService>();
+            services.AddTransient<AuthorsService>();
+            services.AddTransient<PublishersService>();
+            services.AddTransient<LogsService>();
 
             services.AddControllers();
             services.AddApiVersioning(config =>
