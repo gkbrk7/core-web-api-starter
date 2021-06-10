@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using my_books_api.Data;
 using my_books_api.Data.Models;
+using my_books_api.Data.Services;
 using NUnit.Framework;
 
 namespace my_books_tests
@@ -11,6 +12,7 @@ namespace my_books_tests
     {
         private static DbContextOptions<AppDbContext> dbContextOptions = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "BookDbTest").Options;
         AppDbContext context;
+        PublishersService publisherService;
 
         [OneTimeSetUp]
         public void Setup()
@@ -19,6 +21,8 @@ namespace my_books_tests
             context.Database.EnsureCreated();
 
             SeedDatabase();
+
+            publisherService = new PublishersService(context);
         }
 
         [OneTimeTearDown]
@@ -106,9 +110,10 @@ namespace my_books_tests
         }
 
         [Test]
-        public void Test1()
+        public void GetAllPublishers_WithNoSortBy_WithNoSearchString_WithNoPageNumber()
         {
-            Assert.Pass();
+            var result = publisherService.GetAllPublishers("", "", null);
+            //Assert.That()
         }
     }
 }
