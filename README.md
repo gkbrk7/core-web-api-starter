@@ -137,8 +137,8 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
   }
   ```
 
-# Authentication and Authorization
-
 # Unit Testing
 
-> Install
+> Install _`NUnit`_, _`NUnit3TestAdapter`_ and _`Microsoft.EntityFrameworkCore.InMemory`_ packages from nuget.\
+> All the basic tests of PublisherService are in `test` directory.\
+> To learn about NUnit testing, visit -> [NUnit Testing](https://dotnethow.net/nunit-testing-framework)

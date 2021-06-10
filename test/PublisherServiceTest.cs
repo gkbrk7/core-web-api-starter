@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using my_books_api.Data;
 using my_books_api.Data.Models;
@@ -44,6 +45,18 @@ namespace my_books_tests
                 new Publisher{
                     Id = 3,
                     Name = "Publisher 3"
+                },
+                new Publisher{
+                    Id = 4,
+                    Name = "Publisher 4"
+                },
+                new Publisher{
+                    Id = 5,
+                    Name = "Publisher 5"
+                },
+                new Publisher{
+                    Id = 6,
+                    Name = "Publisher 6"
                 },
             };
             context.Publishers.AddRange(publishers);
@@ -109,11 +122,53 @@ namespace my_books_tests
             context.SaveChanges();
         }
 
-        [Test]
-        public void GetAllPublishers_WithNoSortBy_WithNoSearchString_WithNoPageNumber()
+        [Test, Order(1)]
+        public void GetAllPublishers_WithNoSortBy_WithNoSearchString_WithNoPageNumber_Test()
         {
             var result = publisherService.GetAllPublishers("", "", null);
-            //Assert.That()
+            Assert.That(result.Count(), Is.EqualTo(5));
+            Assert.AreEqual(result.Count(), 5);
         }
+
+        [Test, Order(3)]
+        public void GetAllPublishers_WithNoSortBy_WithNoSearchString_WithPageNumber_Test()
+        {
+            var result = publisherService.GetAllPublishers("", "", 2);
+            Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.AreEqual(result.Count(), 1);
+        }
+
+        [Test, Order(2)]
+        public void GetAllPublishers_WithNoSortBy_WithSearchString_WithNoPageNumber_Test()
+        {
+            var result = publisherService.GetAllPublishers("", "3", null);
+            Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.AreEqual(result.Count(), 1);
+            Assert.That(result.FirstOrDefault().Name, Is.EqualTo("Publisher 3"));
+        }
+
+        [Test, Order(4)]
+        public void GetAllPublishers_WithSortBy_WithNoSearchString_WithNoPageNumber_Test()
+        {
+            var result = publisherService.GetAllPublishers("name_desc", "", null);
+            Assert.That(result.Count(), Is.EqualTo(5));
+            Assert.AreEqual(result.Count(), 5);
+            Assert.That(result.FirstOrDefault().Name, Is.EqualTo("Publisher 6"));
+        }
+
+        [Test, Order(5)]
+        public void GetPublisherById_WithResponse_Test()
+        {
+            var result = publisherService.GetPublisherById(1);
+            Assert.That(result.Name, Is.EqualTo("Publisher 1"));
+        }
+
+        [Test, Order(6)]
+        public void GetPublisherById_WithoutResponse_Test()
+        {
+            var result = publisherService.GetPublisherById(99);
+            Assert.That(result?.Name, Is.Null);
+        }
+
     }
 }

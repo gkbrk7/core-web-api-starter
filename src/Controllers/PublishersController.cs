@@ -24,7 +24,7 @@ namespace my_books_api.Controllers
         public async Task<IActionResult> AddPublisher([FromBody] PublisherVM publisher)
         {
             await _publishersService.AddPublisherAsync(publisher);
-            return Ok();
+            return Created(nameof(AddPublisher), null);
         }
 
         [HttpGet("get-publisher-books-with-authors/{id}")]
